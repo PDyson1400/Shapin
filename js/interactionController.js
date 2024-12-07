@@ -12,8 +12,8 @@ class InteractionController {
         return this.createRemoveListenerFunction(event, action);
     }
 
-    mouseClickListener(action) {
-        const event = "click"
+    mouseDownListener(action) {
+        const event = "mousedown"
         addEventListener(event, (e) => {
             const mouseX = e.clientX;
             const mouseY = e.clientY;

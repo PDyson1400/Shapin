@@ -3,8 +3,10 @@ class ShapeController {
         this.points = []
     }
 
-    addPoint(xx, yy, size, set=false, leftPoint={}, rightPoint={}){
-        this.points.push({ xx, yy, size, set, leftPoint, rightPoint, selected: false});
+    addPoint(xx, yy, size, set=false, adjPoint1={}, adjPoint2={}){
+        const point = { xx, yy, size, set, adjPoint1, adjPoint2, selected: false}
+        this.points.push(point);
+        return point;
     }
 
     selectedPoint() {

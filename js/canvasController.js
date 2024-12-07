@@ -5,7 +5,7 @@ class CanvasController {
         this.canvas.height = window.innerHeight;
         this.ctx = this.canvas.getContext("2d");
 
-        this.windowResizeListener();
+        // this.windowResizeListener();
     }
 
     setCanvasDimensions() {
@@ -30,14 +30,14 @@ class CanvasController {
         this.ctx.moveTo(startXx, startYy);
         this.ctx.lineTo(endXx, endYy);
         this.ctx.stroke();
-        context.closePath();
+        this.ctx.closePath();
     }
 
-    private
+    // private
 
-    windowResizeListener() {
-        window.onresize = this.setCanvasDimensions.bind(this);
-    }
+    // windowResizeListener() {
+    //     window.onresize = this.setCanvasDimensions.bind(this);
+    // }
 }
 
 module.exports = CanvasController;
