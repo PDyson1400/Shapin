@@ -1,4 +1,5 @@
-const CanvasController = require("./canvasController")
+const ControllerController = require ("./controllerController");
 
-const canvasController = new CanvasController()
-canvasController.drawSquare(100, 100, 100, [0, 255, 255])
+const controllerController = new ControllerController();
+
+controllerController.setUp();

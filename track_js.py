@@ -20,7 +20,9 @@ while True:
     files = os.listdir('./js')
     for file in files:
         if os.stat(path(file)).st_mtime != file_changes.get(file):
-            print("changed " + file)
+            local_time = time.localtime()
+            current_time = time.strftime("%H:%M:%S", local_time)
+            print("changed " + file + " " + current_time)
             file_changes[file] = os.stat(path(file)).st_mtime
             bundle_js()
     time.sleep(1)
