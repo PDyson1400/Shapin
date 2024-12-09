@@ -23,12 +23,12 @@ class CanvasController {
         this.ctx.fillRect(xx, yy, size, size);
     }
 
-    drawLine(startXx, startYy, endXx, endYy, width, colour) {
+    drawLine(point1, point2, width, colour) {
         this.ctx.strokeStyle = `rgb(${colour[0]} ${colour[1]} ${colour[2]})`;
         this.ctx.lineWidth = width;
         this.ctx.beginPath();
-        this.ctx.moveTo(startXx, startYy);
-        this.ctx.lineTo(endXx, endYy);
+        this.ctx.moveTo(point1.xx + point1.size/2, point1.yy + point1.size/2);
+        this.ctx.lineTo(point2.xx + point2.size/2, point2.yy + point2.size/2);
         this.ctx.stroke();
         this.ctx.closePath();
     }

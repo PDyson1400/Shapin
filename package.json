@@ -4,12 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "bundle": "browserify ./js/index.js -o ./bundle/bundle.js"
+    "bundle": "browserify ./js/index.js -o ./bundle/bundle.js",
+    "test": "jest",
+    "lint": "npx eslint ./ --fix"
   },
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
     "browserify": "^17.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.16.0",
+    "globals": "^15.13.0",
+    "jest": "^29.7.0"
   }
 }

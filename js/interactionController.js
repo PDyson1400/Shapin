@@ -3,7 +3,7 @@ class InteractionController {
     }
 
     mouseMoveListener(action) {
-        const event = "mousemove"
+        const event = "mousemove";
         addEventListener(event, (e) => {
             const mouseX = e.clientX;
             const mouseY = e.clientY;
@@ -13,7 +13,7 @@ class InteractionController {
     }
 
     mouseDownListener(action) {
-        const event = "mousedown"
+        const event = "mousedown";
         addEventListener(event, (e) => {
             const mouseX = e.clientX;
             const mouseY = e.clientY;
@@ -23,18 +23,18 @@ class InteractionController {
     }
 
     mouseReleaseListener(action) {
-        const event = "mouseup"
-        addEventListener(event, () => {action()});
+        const event = "mouseup";
+        addEventListener(event, () => {action();});
         return this.createRemoveListenerFunction(event, action);
     }
 
-    private
+    private;
 
     createRemoveListenerFunction(event, action) {
         return function() {
             removeEventListener(event, action);
-        }
+        };
     }
 }
 
-module.exports = InteractionController
+module.exports = InteractionController;
