@@ -38,6 +38,46 @@ class ShapeController {
         return {gradient, yIntercept};
     }
 
+    lineInterceptPoint(line1, line2) {
+        const line1Equation = this.lineEquation(line1);
+        const line2Equation = this.lineEquation(line2);
+
+        const meetingX = (line2Equation.yIntercept - line1Equation.yIntercept)/(line1Equation.gradient - line2Equation.gradient);
+        const meetingY = line1Equation.gradient * meetingX + line1Equation.yIntercept;
+
+        return {xx: meetingX, yy: meetingY};
+    }
+
+    withinLine(line, xx, yy) {
+        const lineStartXx = line.startPoint.xx;
+        const lineEndXx = line.endPoint.xx;
+        const lineStartYy = line.startPoint.yy;
+        const lineEndYy = line.endPoint.yy;
+
+        return xx < Math.max(lineStartXx, lineEndXx)
+        && xx > Math.min(lineStartXx, lineEndXx)
+        && yy < Math.max(lineStartYy, lineEndYy)
+        && yy > Math.min(lineStartYy, lineEndYy)
+    }
+
+    linesCross(line1, line2) {
+        const {xx, yy} = this.lineInterceptPoint(line1, line2);
+
+        return this.withinLine(line1, xx, yy);
+    }
+
+    lineCrossesLine(line) {
+        const {lines, xOffset} = this.getLineData();
+
+        for(var i = 0; i < lines.length; i++) {
+            if(this.linesCross(line, lines[i])) {
+                return lines[i];
+            }
+        }
+
+        return false
+    }
+
     pointCrossesLine(xx, yy, line) {
         const lineEquation = this.lineEquation(line);
         const gradient = lineEquation.gradient;
@@ -45,38 +85,6 @@ class ShapeController {
 
         const meetsLine = yy == gradient * xx + yIntercept;
         return meetsLine;
-    }
-
-    pointCrossesLineGenerous(xx, yy, line) {
-        const lineEquation = this.lineEquation(line);
-        const gradient = lineEquation.gradient;
-        const yIntercept = lineEquation.yIntercept;
-
-        let meetsLine = false;
-        for(var i = -1; i < 2; i++) {
-            for(var j = -1; i < 2; i++) {
-                if(yy + i * 5 >= gradient * (xx + j * 5) + yIntercept
-                && yy + i * -5 <= gradient * (xx + j * -5) + yIntercept) {
-                    meetsLine = true;
-                };
-            }
-        }
-        return meetsLine;
-    }
-
-    pointCrossesAnyLine(point, generous=false) {
-        const data = this.getLineData();
-        const lines = data.lines;
-
-        for(var i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            if(!generous && this.pointCrossesLine(point.xx, point.yy, line)) {
-                return line;
-            } else if (generous && this.pointCrossesLineGenerous(point.xx, point.yy, line)) {
-                return line;
-            };
-        }
-        return false;
     }
 
     isPointInsideShape(point) {
@@ -94,16 +102,9 @@ class ShapeController {
             for(var xx = point.xx; xx <= maxPointX; xx++) {
                 for(var i = 0; i < lines.length; i++) {
                     const line = lines[i];
-                    const lineStartXx = line.startPoint.xx;
-                    const lineEndXx = line.endPoint.xx;
-                    const lineStartYy = line.startPoint.yy;
-                    const lineEndYy = line.endPoint.yy;
 
                     if(this.pointCrossesLine(xx, yy, line)
-                    && xx < Math.max(lineStartXx, lineEndXx)
-                    && xx > Math.min(lineStartXx, lineEndXx)
-                    && yy < Math.max(lineStartYy, lineEndYy)
-                    && yy > Math.min(lineStartYy, lineEndYy)) {
+                    && this.withinLine(line, xx, yy)) {
                         lineIntersections++;
                     }
                 }

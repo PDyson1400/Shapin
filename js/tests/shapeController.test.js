@@ -49,29 +49,6 @@ describe("ShapeController", () => {
         expect(doesntCrossEither).toEqual(false);
     });
 
-    test("pointCrossesLineGenerous", () => {
-        const line = {startPoint: {xx: 100, yy: 100}, endPoint: {xx: 200, yy: 300}};
-
-        const crosses = shapeController.pointCrossesLineGenerous(150, 200, line);
-        const crossesGenerous1 = shapeController.pointCrossesLineGenerous(147, 200, line);
-        const crossesGenerous2 = shapeController.pointCrossesLineGenerous(150, 202, line);
-        const crossesGenerous3 = shapeController.pointCrossesLineGenerous(147, 195, line);
-        const crossesGenerous4 = shapeController.pointCrossesLineGenerous(152, 204, line);
-        const crossesGenerous5 = shapeController.pointCrossesLineGenerous(155, 205, line);
-
-        const doesntCross = shapeController.pointCrossesLineGenerous(140, 200, line);
-        const doesntCrossEither = shapeController.pointCrossesLineGenerous(158, 192, line);
-
-        expect(crosses).toEqual(true);
-        expect(crossesGenerous1).toEqual(true);
-        expect(crossesGenerous2).toEqual(true);
-        expect(crossesGenerous3).toEqual(true);
-        expect(crossesGenerous4).toEqual(true);
-        expect(crossesGenerous5).toEqual(true);
-        expect(doesntCross).toEqual(false);
-        expect(doesntCrossEither).toEqual(false);
-    });
-
     test("isPointInsideShape", () => {
         const point1 = shapeController.addPoint(100, 300, 15, true);
         const point2 = shapeController.addPoint(500, 300, 15, true, point1);

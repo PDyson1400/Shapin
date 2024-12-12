@@ -67,24 +67,31 @@ class ControllerController {
         this.canvasController.drawLine(midPoint, endPoint, 10, [150, 100, 100]);
     }
 
+    setCrossedLine(point, crossedLine) {
+        point.inside = this.shapeController.isPointInsideShape(point);
+
+        if(!point.inside && crossedLine != false) {
+            this.lastCrossedLine = {
+                startPoint: crossedLine.startPoint,
+                midPoint: point,
+                endPoint: crossedLine.endPoint
+            };
+        } else if (point.inside && this.lastCrossedLine != false) {
+            this.lastCrossedLine = false;
+        }
+    }
+
     movePoint(mouseX, mouseY) {
         const point = this.shapeController.getSelectedPoint();
         if(point != undefined && !point.set) {
+            const moveLine = {startPoint: {xx: point.xx, yy: point.yy}, 
+                                endPoint: {xx: mouseX, yy: mouseY}};
+            const crossedLine = this.shapeController.lineCrossesLine(moveLine)
+
             point.xx = mouseX - this.pointOffset.xx;
             point.yy = mouseY - this.pointOffset.yy;
 
-            point.inside = this.shapeController.isPointInsideShape(point);
-            const crossedLine = this.shapeController.pointCrossesAnyLine(point, true);
-
-            if(!point.inside && crossedLine != false) {
-                this.lastCrossedLine = {
-                    startPoint: crossedLine.startPoint,
-                    midPoint: point,
-                    endPoint: crossedLine.endPoint
-                };
-            } else if (point.inside && this.lastCrossedLine != false) {
-                this.lastCrossedLine = false;
-            }
+            this.setCrossedLine(point, crossedLine);
 
             this.canvasController.resetCanvas();
             this.renderShape();
