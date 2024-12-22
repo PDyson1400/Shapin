@@ -15,14 +15,15 @@ def current_time():
     current_time = time.strftime("%H:%M:%S", local_time)
     return current_time
 
-files = os.listdir('./js')
+files = os.listdir(DIR)
 file_changes = {}
 
 for file in files:
         file_changes[file] = os.stat(path(file)).st_mtime
 
+print("Tracking of " + DIR + " started")
 while True:
-    files = os.listdir('./js')
+    files = os.listdir(DIR)
     for file in files:
         if os.stat(path(file)).st_mtime != file_changes.get(file):
             # npm_run("lint")

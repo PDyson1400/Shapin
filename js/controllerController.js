@@ -8,7 +8,10 @@ class ControllerController {
         this.interactionController = new InteractionController();
         this.shapeController = new ShapeController();
 
-        this.pointOffset = {xx: 0, yy: 0};
+        this.mouse = {
+            pointOffset: {xx: 0, yy: 0},
+            last: {xx: 0, yy: 0}
+        }
         this.lastCrossedLine = false;
     }
 
@@ -29,7 +32,7 @@ class ControllerController {
 
         this.shapeController.addPoint(300, 250, 15, false);
 
-        this.renderShape();
+        this.renderShapes();
     }
 
     addEventListeners() {
@@ -38,7 +41,24 @@ class ControllerController {
         this.interactionController.mouseReleaseListener((mouseX, mouseY) => {this.releasePoint(mouseX, mouseY);});
     }
 
-    renderShape() {
+    renderTestShapes() {
+        const testPoints = this.shapeController.test.points;
+        const testLines = this.shapeController.test.lines;
+
+        for(var i = 0; i < testPoints.length; i++) {
+            const testPoint = testPoints[i];
+            this.renderPoints(testPoint);
+        }
+        for(var i = 0; i < testLines.length; i++) {
+            const testLine = testLines[i];
+            testLine.startPoint.size = 5;
+            testLine.endPoint.size = 5;
+
+            this.canvasController.drawLine(testLine.startPoint, testLine.endPoint, 10, [200, 100, 150]);
+        }
+    }
+
+    renderShapes() {
         const points = this.shapeController.points;
         for(var i = 0; i < points.length; i++) {
             const point = points[i];
@@ -51,6 +71,7 @@ class ControllerController {
             const point = points[i];
             this.renderPoints(point);
         }
+        this.renderTestShapes()
     }
 
     renderPoints(point) {
@@ -70,7 +91,7 @@ class ControllerController {
     setCrossedLine(point, crossedLine) {
         point.inside = this.shapeController.isPointInsideShape(point);
 
-        if(!point.inside && crossedLine != false) {
+        if(!point.inside && crossedLine != false && this.lastCrossedLine == false) {
             this.lastCrossedLine = {
                 startPoint: crossedLine.startPoint,
                 midPoint: point,
@@ -84,17 +105,20 @@ class ControllerController {
     movePoint(mouseX, mouseY) {
         const point = this.shapeController.getSelectedPoint();
         if(point != undefined && !point.set) {
-            const moveLine = {startPoint: {xx: point.xx, yy: point.yy}, 
-                                endPoint: {xx: mouseX, yy: mouseY}};
-            const crossedLine = this.shapeController.lineCrossesLine(moveLine)
+            const moveLine = {startPoint: {xx: this.mouse.last.xx, yy: this.mouse.last.yy}, 
+                endPoint: {xx: mouseX, yy: mouseY}};
+            this.mouse.last.xx = mouseX;
+            this.mouse.last.yy = mouseY;
+            
+            const crossedLine = this.shapeController.lineCrossesLine(moveLine);
 
-            point.xx = mouseX - this.pointOffset.xx;
-            point.yy = mouseY - this.pointOffset.yy;
+            point.xx = mouseX - this.mouse.pointOffset.xx;
+            point.yy = mouseY - this.mouse.pointOffset.yy;
 
             this.setCrossedLine(point, crossedLine);
 
             this.canvasController.resetCanvas();
-            this.renderShape();
+            this.renderShapes();
         }
     }
 
@@ -108,8 +132,8 @@ class ControllerController {
                 && !point.set
             ) {
                 point.selected = true;
-                this.pointOffset.xx = mouseX - point.xx;
-                this.pointOffset.yy = mouseY - point.yy;
+                this.mouse.pointOffset.xx = mouseX - point.xx;
+                this.mouse.pointOffset.yy = mouseY - point.yy;
             }
         }
     }
