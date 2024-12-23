@@ -48,23 +48,23 @@ describe("ShapeController", () => {
         const line7 = {startPoint: {xx: 2, yy: 5}, endPoint: {xx: 3, yy: 5}};
         const line8 = {startPoint: {xx: 2, yy: 5}, endPoint: {xx: 1, yy: 5}};
 
-        expect(shapeController.lineEquation(line1)).toEqual({gradient: 2, yIntercept: -1, xIntercept: 0.5})
-        expect(shapeController.lineEquation(line2)).toEqual({gradient: 2, yIntercept: -1, xIntercept: 0.5})
-        expect(shapeController.lineEquation(line3)).toEqual({gradient: -2, yIntercept: 5, xIntercept: 2.5})
-        expect(shapeController.lineEquation(line4)).toEqual({gradient: -2, yIntercept: 5, xIntercept: 2.5})
-        expect(shapeController.lineEquation(line5)).toEqual({gradient: false, yIntercept: false, xIntercept: 1})
-        expect(shapeController.lineEquation(line6)).toEqual({gradient: false, yIntercept: false, xIntercept: 1})
-        expect(shapeController.lineEquation(line7)).toEqual({gradient: 0, yIntercept: 5, xIntercept: false})
-        expect(shapeController.lineEquation(line8)).toEqual({gradient: 0, yIntercept: 5, xIntercept: false})
+        expect(shapeController.lineEquation(line1)).toEqual({gradient: 2, yIntercept: -1, xIntercept: 0.5});
+        expect(shapeController.lineEquation(line2)).toEqual({gradient: 2, yIntercept: -1, xIntercept: 0.5});
+        expect(shapeController.lineEquation(line3)).toEqual({gradient: -2, yIntercept: 5, xIntercept: 2.5});
+        expect(shapeController.lineEquation(line4)).toEqual({gradient: -2, yIntercept: 5, xIntercept: 2.5});
+        expect(shapeController.lineEquation(line5)).toEqual({gradient: false, yIntercept: false, xIntercept: 1});
+        expect(shapeController.lineEquation(line6)).toEqual({gradient: false, yIntercept: false, xIntercept: 1});
+        expect(shapeController.lineEquation(line7)).toEqual({gradient: 0, yIntercept: 5, xIntercept: false});
+        expect(shapeController.lineEquation(line8)).toEqual({gradient: -0, yIntercept: 5, xIntercept: false});
     });
 
-    test.only("lineInterceptPoint", () => {
+    test("lineInterceptPoint", () => {
         const line1 = {startPoint: {xx: -100, yy: 100}, endPoint: {xx: 200, yy: 400}};
         const line2 = {startPoint: {xx: 100, yy: 0}, endPoint: {xx: 200, yy: 200}};
         const line3 = {startPoint: {xx: 100, yy: 100}, endPoint: {xx: 200, yy: -400}};
-        const line4 = {startPoint: {xx: 0, yy: 0}, endPoint: {xx: 300, yy: -300}}
+        const line4 = {startPoint: {xx: 0, yy: 0}, endPoint: {xx: 300, yy: -300}};
         const line5 = {startPoint: {xx: -100, yy: 100}, endPoint: {xx: 200, yy: 400}};
-        const line6 = {startPoint: {xx: 0, yy: 0}, endPoint: {xx: 300, yy: -300}}
+        const line6 = {startPoint: {xx: 0, yy: 0}, endPoint: {xx: 300, yy: -300}};
         const line7 = {startPoint: {xx: 0, yy: 0}, endPoint: {xx: 100, yy: 200}};
         const line8 = {startPoint: {xx: -500, yy: 100}, endPoint: {xx: 200, yy: 100}};
         const line9 = {startPoint: {xx: 100, yy: 100}, endPoint: {xx: 200, yy: 300}};
@@ -76,14 +76,14 @@ describe("ShapeController", () => {
         const line15 = {startPoint: {xx: 100, yy: 100}, endPoint: {xx: 100, yy: 200}};
         const line16 = {startPoint: {xx: 100, yy: 500}, endPoint: {xx: 200, yy: 500}};
 
-        expect(shapeController.lineInterceptPoint(line1, line2)).toEqual({xx: 400, yy: 600})
-        expect(shapeController.lineInterceptPoint(line3, line4)).toEqual({xx: 150, yy: -150})
-        expect(shapeController.lineInterceptPoint(line5, line6)).toEqual({xx: -100, yy: 100})
-        expect(shapeController.lineInterceptPoint(line7, line8)).toEqual({xx: 50, yy: 100})
-        expect(shapeController.lineInterceptPoint(line9, line10)).toEqual({xx: 300, yy: 500})
-        expect(shapeController.lineInterceptPoint(line11, line12)).toEqual(true)
-        expect(shapeController.lineInterceptPoint(line13, line14)).toEqual(false)
-        expect(shapeController.lineInterceptPoint(line15, line16)).toEqual({xx: 100, yy: 500})
+        expect(shapeController.lineInterceptPoint(line1, line2)).toEqual({xx: 400, yy: 600});
+        expect(shapeController.lineInterceptPoint(line3, line4)).toEqual({xx: 150, yy: -150});
+        expect(shapeController.lineInterceptPoint(line5, line6)).toEqual({xx: -100, yy: 100});
+        expect(shapeController.lineInterceptPoint(line7, line8)).toEqual({xx: 50, yy: 100});
+        expect(shapeController.lineInterceptPoint(line9, line10)).toEqual({xx: 300, yy: 500});
+        expect(shapeController.lineInterceptPoint(line11, line12)).toEqual(true);
+        expect(shapeController.lineInterceptPoint(line13, line14)).toEqual(false);
+        expect(shapeController.lineInterceptPoint(line15, line16)).toEqual({xx: 100, yy: 500});
     });
 
     test("lineLength", () => {

@@ -11,7 +11,7 @@ class ControllerController {
         this.mouse = {
             pointOffset: {xx: 0, yy: 0},
             last: {xx: 0, yy: 0}
-        }
+        };
         this.lastCrossedLine = false;
     }
 
@@ -71,7 +71,7 @@ class ControllerController {
             const point = points[i];
             this.renderPoints(point);
         }
-        this.renderTestShapes()
+        this.renderTestShapes();
     }
 
     renderPoints(point) {
@@ -106,7 +106,7 @@ class ControllerController {
         const point = this.shapeController.getSelectedPoint();
         if(point != undefined && !point.set) {
             const moveLine = {startPoint: {xx: this.mouse.last.xx, yy: this.mouse.last.yy}, 
-                endPoint: {xx: mouseX, yy: mouseY}};
+                endPoint: {xx: mouseX, yy: mouseY}, point};
             this.mouse.last.xx = mouseX;
             this.mouse.last.yy = mouseY;
             

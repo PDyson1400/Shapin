@@ -49,16 +49,16 @@ class ShapeController {
     }
 
     lineEquation(line) {
-        const lineIsVertical = line.endPoint.xx - line.startPoint.xx == 0
+        const lineIsVertical = line.endPoint.xx - line.startPoint.xx == 0;
         if(lineIsVertical) {
-            return {gradient: false, yIntercept: false, xIntercept: line.endPoint.xx}
+            return {gradient: false, yIntercept: false, xIntercept: line.endPoint.xx};
         }
         const gradient = (line.endPoint.yy - line.startPoint.yy)/(line.endPoint.xx - line.startPoint.xx);
         const yIntercept = line.endPoint.yy - line.endPoint.xx * gradient;
 
         
         let xIntercept = -yIntercept/gradient;
-        const lineIsHorizontal = line.endPoint.yy - line.startPoint.yy == 0
+        const lineIsHorizontal = line.endPoint.yy - line.startPoint.yy == 0;
         if(lineIsHorizontal) {
             xIntercept = false;
         }
@@ -68,27 +68,27 @@ class ShapeController {
 
     sameLine(line1, line2) {
         return line1.startPoint.xx == line2.startPoint.xx && line1.startPoint.yy == line2.startPoint.yy 
-        && line1.endPoint.xx == line2.endPoint.xx && line1.endPoint.yy == line2.endPoint.yy
+        && line1.endPoint.xx == line2.endPoint.xx && line1.endPoint.yy == line2.endPoint.yy;
     }
 
     lineInterceptPoint(line1, line2) {
         if(this.sameLine(line1, line2)) {
-            return true
+            return true;
         }
         const line1Equation = this.lineEquation(line1);
         const line2Equation = this.lineEquation(line2);
         if(line1Equation.gradient == line2Equation.gradient && line1Equation.gradient != 0) {
-            return false
+            return false;
         }
 
         if(line1Equation.gradient == 0 && line1Equation.xIntercept) {
-            const xx = line1.startPoint.xx
+            const xx = line1.startPoint.xx;
             const yy = line2Equation.gradient * xx + line2Equation.yIntercept;
-            return {xx, yy}
+            return {xx, yy};
         } else if (line2Equation.gradient == 0 && line1Equation.xIntercept) {
-            const xx = line2.startPoint.xx
+            const xx = line2.startPoint.xx;
             const yy = line1Equation.gradient * xx + line1Equation.yIntercept;
-            return {xx, yy}
+            return {xx, yy};
         }
         const meetingX = (line2Equation.yIntercept - line1Equation.yIntercept)/(line1Equation.gradient - line2Equation.gradient);
         const meetingY = line2Equation.gradient * meetingX + line2Equation.yIntercept;
@@ -114,22 +114,47 @@ class ShapeController {
         return this.withinLine(line2, xx, yy);
     }
 
+    pointDistance(point1, point2) {
+        const xx = point1.xx - point2.xx;
+        const yy = point1.yy - point2.yy;
+
+        return Math.sqrt(xx * xx + yy * yy);
+    }
+
+    closestToPoint(interceptions, interceptLines, point) {
+        let closestIndex = 0;
+        let closestDistance = -1;
+        for(var i = 0; i < interceptions.length; i++) {
+            const dist = this.pointDistance(point, interceptions[i]);
+            if(dist < closestDistance && closestDistance > 0 || closestDistance < 0) {
+                closestDistance = dist;
+                closestIndex = i;
+            }
+        }
+
+        return interceptLines[closestIndex];
+    }
+
     lineCrossesLine(line) {
         const {lines, xOffset} = this.getLineData();
-
+        const interceptions = [];
+        const interceptLines = [];
         for(var i = 0; i < lines.length; i++) {
             if(this.linesCross(line, lines[i])) {
-                return lines[i];
+                interceptions.push(this.lineInterceptPoint(line, lines[i]));
+                interceptLines.push(lines[i]);
             }
+        }
+
+        if(interceptions.length > 0) {
+            return this.closestToPoint(interceptions, interceptLines, line.point);
         }
 
         return false;
     }
 
     pointCrossesLine(line, xx, yy) {
-        const lineEquation = this.lineEquation(line);
-        const gradient = lineEquation.gradient;
-        const yIntercept = lineEquation.yIntercept;
+        const {gradient, yIntercept} = this.lineEquation(line);
 
         const meetsLine = yy == gradient * xx + yIntercept;
         return meetsLine;
