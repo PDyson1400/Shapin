@@ -36,9 +36,11 @@ class ControllerController {
     }
 
     addEventListeners() {
-        this.interactionController.mouseDownListener((mouseX, mouseY) => {this.pointClick(mouseX, mouseY);});
+        this.interactionController.mouseDownListener((mouseButton, mouseX, mouseY) => {this.mouseDown(mouseButton, mouseX, mouseY);});
         this.interactionController.mouseMoveListener((mouseX, mouseY) => {this.movePoint(mouseX, mouseY);});
         this.interactionController.mouseReleaseListener((mouseX, mouseY) => {this.releasePoint(mouseX, mouseY);});
+        this.interactionController.contextMenuListener();
+        this.interactionController.keyDownListener();
     }
 
     renderTestShapes() {
@@ -59,10 +61,12 @@ class ControllerController {
     }
 
     renderShapes() {
+        this.canvasController.resetCanvas();
         const points = this.shapeController.points;
-        for(var i = 0; i < points.length; i++) {
-            const point = points[i];
-            this.renderLines(point);
+        const {lines, maxPointX} = this.shapeController.getLineData();
+        for(var i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            this.renderLines(line);
         }
         if(this.lastCrossedLine != false) {
             this.renderLastCrossedLine();
@@ -78,8 +82,8 @@ class ControllerController {
         this.canvasController.drawSquare(point.xx, point.yy, point.size, [100, 150, 200]);
     }
 
-    renderLines(point) {
-        this.canvasController.drawLine(point, point.adjPoint1, 10, [100, 100, 150]);
+    renderLines(line) {
+        this.canvasController.drawLine(line.startPoint, line.endPoint, 10, [100, 100, 150]);
     }
 
     renderLastCrossedLine() {
@@ -117,12 +121,19 @@ class ControllerController {
 
             this.setCrossedLine(point, crossedLine);
 
-            this.canvasController.resetCanvas();
             this.renderShapes();
         }
     }
 
-    pointClick(mouseX, mouseY) {
+    mouseDown(button, mouseX, mouseY) {
+        if(button == 0) {
+            this.pointClick(mouseX, mouseY);
+        } else if (button == 2) {
+            this.setPointClick(mouseX, mouseY);
+        }
+    }
+
+    toPoint(func, mouseX, mouseY) {
         const points = this.shapeController.points;
         for(var i = 0; i < points.length; i++) {
             const point = points[i];
@@ -131,11 +142,38 @@ class ControllerController {
                 && mouseY >= point.yy && mouseY <= point.yy + point.size
                 && !point.set
             ) {
-                point.selected = true;
-                this.mouse.pointOffset.xx = mouseX - point.xx;
-                this.mouse.pointOffset.yy = mouseY - point.yy;
+                func(point);
             }
         }
+    }
+
+    pointClick(mouseX, mouseY) {
+        this.toPoint((point) => {
+            point.selected = true;
+            this.mouse.pointOffset.xx = mouseX - point.xx;
+            this.mouse.pointOffset.yy = mouseY - point.yy;
+        }, mouseX, mouseY);
+    }
+
+    confirmTemporaryLines() {
+        const {startPoint, midPoint, endPoint} = this.lastCrossedLine;
+        console.log(startPoint, midPoint, endPoint);
+        startPoint.adjPoint1 = midPoint;
+        endPoint.adjPoint2 = midPoint;
+        midPoint.adjPoint1 = endPoint;
+        midPoint.adjPoint2 = startPoint;
+        this.lastCrossedLine = false;
+    }
+
+    setPointClick(mouseX, mouseY) {
+        this.toPoint((point) => {
+            if(!this.shapeController.isPointInsideShape(point)) {
+                point.set = true;
+                this.confirmTemporaryLines();
+                this.shapeController.addPoint(300, 250, 15, false);
+                this.renderShapes();
+            }
+        }, mouseX, mouseY);
     }
 
     releasePoint(mouseX, mouseY) {
