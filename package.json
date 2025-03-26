@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "setup": "npm install && npm run bundle",
     "bundle": "browserify ./js/index.js -o ./bundle/bundle.js",
     "test": "jest",
     "lint": "npx eslint ./ --fix"
